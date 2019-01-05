@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:text="Hello"
+        android:id="@+id/menuId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivery Time: "/>
+
+
+        <TextView
+            android:padding="3dp"
+            android:textStyle="normal"
+            android:gravity="center_vertical"
+            android:text="120"
+            android:id="@+id/priceId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" mins "/>
+    </LinearLayout>
+</LinearLayout>

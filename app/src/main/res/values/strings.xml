@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Home</string>
+    <string-array name="MenuList">
+        <item>Burger</item>
+        <item>Sub Sandwich</item>
+        <item>Pizza</item>
+        <item>Pasta</item>
+        <item>Drinks</item>
+        <item>Water</item>
+    </string-array>
+    <string-array name="priceList">
+        <item>220 TK</item>
+        <item>120 Tk</item>
+        <item>500 TK</item>
+        <item>300 TK</item>
+        <item>30 TK</item>
+        <item>20 TK</item>
+    </string-array>
+</resources>
