@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/register_background"
+    tools:context=".RegisterActivity">
+    <TextView
+        android:text="Create an account"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:gravity="center"
+        android:textColor="#f2f2f2"
+        android:background="#99141414"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/userRegId"
+        android:hint="Username"
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#160203"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/passRegId"
+        android:hint="Password"
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#160203"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/conPassRegId"
+        android:hint="Confirm Password"
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#160203"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/phoneId"
+        android:hint="Phone NO."
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#160203"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/addressId"
+        android:hint="Address"
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#160203"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spinnerId"
+        android:layout_width="match_parent"
+        android:background="#fdf8ff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_height="wrap_content">
+
+    </Spinner>
+
+    <LinearLayout
+        android:id="@+id/adminextra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/restaurentname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Name of the Restaurent"/>
+
+        <EditText
+            android:id="@+id/restaurentaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Location"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/create_btn"
+
+        android:text="Create"
+        android:textColor="#F8FF99"
+        android:textSize="30sp"
+
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/register_button"
+        android:shadowColor="#8A92A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+
+        />
+
+
+</LinearLayout>

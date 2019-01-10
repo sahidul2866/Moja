@@ -26,6 +26,7 @@ public class Home extends AppCompatActivity  {
     private ListView listView;
     private List<foodPrice> list;
     private Intent intent;
+    Button login;
 
     DatabaseReference databaseHome;
     @Override
@@ -36,10 +37,16 @@ public class Home extends AppCompatActivity  {
         databaseHome = FirebaseDatabase.getInstance().getReference("Home");
 
         listView=findViewById(R.id.HomeList);
+        login = (Button) findViewById(R.id.login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this,LogIn.class);
+                startActivity(intent);
 
-        String id = databaseHome.push().getKey();
-        foodPrice newRow = new foodPrice(id, "Delhi Darbar Khilgaon","45");
-        databaseHome.child(id).setValue(newRow);
+            }
+        });
+
 
         list = new ArrayList<>();
 
