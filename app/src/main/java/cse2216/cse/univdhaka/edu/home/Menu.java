@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,10 +29,15 @@ import java.util.List;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
 
+    int flag;
     private Button menuButton;
     private Button reviewButton;
     private Button infoButton;
     private Intent intent;
+
+    String user;
+    String typee;
+    String resName;
 
     private ListView listViewMenu;
     private List<foodPrice> listMenu;
@@ -45,17 +52,33 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     TextView add_price;
     DatabaseReference databaseReview;
     DatabaseReference databaseMenu;
+    DatabaseReference databaseHome;
 
     ListView ReviewListView;
     List<AddReview> reviewList;
 
-    LinearLayout add_layout;
+    LinearLayout add_layout,Mlayout,Rlayout,Ilayout;
+
+    Toolbar toolbar;
+
+    TextView InfoName;
+    TextView InfoAddress;
+    TextView InfoCuisines;
+    TextView InfoMin;
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+
+        toolbar = findViewById(R.id.toolbarID);
+
+        setSupportActionBar(toolbar);
+
+        final ActionBar actionBar =getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         menuButton = findViewById(R.id.Menu);
         reviewButton = findViewById(R.id.Reviews);
@@ -78,10 +101,15 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         add_button.setOnClickListener(this);
         add_submit.setOnClickListener(this);
 
-        Bundle bundle = getIntent().getExtras();
+        final Bundle bundle = getIntent().getExtras();
+        user = bundle.getString("user");
+        typee = bundle.getString("type");
+        resName = bundle.getString("resName");
+        System.out.println(user+typee+resName);
 
         databaseMenu = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Menu");
         databaseReview = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Review");
+        databaseHome = FirebaseDatabase.getInstance().getReference("Home");
 
         listViewMenu=findViewById(R.id.menuListID);
         ReviewListView = findViewById(R.id.ReviewListView);
@@ -89,7 +117,42 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         listMenu = new ArrayList<>();
         reviewList = new ArrayList<>();
 
-        add_button.setVisibility(View.VISIBLE);
+        Mlayout = (LinearLayout) findViewById(R.id.menu_layout);
+        Rlayout = (LinearLayout) findViewById(R.id.review_layout);
+        Ilayout = (LinearLayout) findViewById(R.id.info_layout);
+
+        InfoName = (TextView) findViewById(R.id.infoname);
+        InfoAddress = (TextView) findViewById(R.id.infoaddress);
+        InfoCuisines = (TextView) findViewById(R.id.infocuisines);
+        InfoMin = (TextView) findViewById(R.id.infodelivery);
+
+        databaseHome.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()){
+                    RestaurentList Addreview = reviewSnapShot.getValue(RestaurentList.class);
+                    if(Addreview.getName().equals(resName)) {
+                        InfoName.setText(Addreview.getName());
+                        InfoAddress.setText(Addreview.getAddress());
+                        InfoCuisines.setText(Addreview.getCuisines());
+                        InfoMin.setText(Addreview.getMinOrder());
+
+                        if (Addreview.getAdmin().equals(user)) {
+                            System.out.println(bundle.getString("type") + bundle.getString("user"));
+                            add_button.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
 
@@ -126,20 +189,15 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         if(view.getId()==R.id.Menu) {
 
-            LinearLayout layout = (LinearLayout) findViewById(R.id.review_layout);
-            layout.setVisibility(LinearLayout.GONE);
-            LinearLayout Mlayout = (LinearLayout) findViewById(R.id.menu_layout);
             Mlayout.setVisibility(LinearLayout.VISIBLE);
+            Rlayout.setVisibility(LinearLayout.GONE);
+            Ilayout.setVisibility(LinearLayout.GONE);
         }
 
         if(view.getId()==R.id.Reviews){
-           //intent = new Intent(Menu.this,Review.class);
-           // startActivity(intent);
-
-            LinearLayout layout = (LinearLayout) findViewById(R.id.review_layout);
-            layout.setVisibility(LinearLayout.VISIBLE);
-             LinearLayout Mlayout = (LinearLayout) findViewById(R.id.menu_layout);
             Mlayout.setVisibility(LinearLayout.GONE);
+            Rlayout.setVisibility(LinearLayout.VISIBLE);
+            Ilayout.setVisibility(LinearLayout.GONE);
 
             databaseReview.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -169,8 +227,9 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
             this.review();
        }
         else if(view.getId()==R.id.Info){
-            intent = new Intent(Menu.this,Info.class);
-            startActivity(intent);
+            Mlayout.setVisibility(LinearLayout.GONE);
+            Rlayout.setVisibility(LinearLayout.GONE);
+            Ilayout.setVisibility(LinearLayout.VISIBLE);
         }
 
         else if(view.getId()==R.id.add_button){

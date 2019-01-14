@@ -5,64 +5,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Review">
+    android:background="@drawable/revi">
 
 
 
     <TextView
-        android:layout_width="wrap_content"
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Write A Review:"
-        android:textColor="@color/red"
+        android:gravity="center"
+        android:text="Write A Review"
+        android:textColor="#121212"
+        android:background="#70121212"
         android:textSize="40dp"
         android:outlineSpotShadowColor="@color/colorAccent" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#99F7F9F9"
+        >
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="#121212"
+            android:textSize="20dp"
             android:text="Title:"/>
 
         <EditText
             android:id="@+id/review_title"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content" />
     </LinearLayout>
 
     <RatingBar
         android:id="@+id/star"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
+        android:background="#99F7F9F9  "
         android:numStars="5"
         android:stepSize=".5"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#99F7F9F9">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="#121212"
             android:text="Details:"/>
 
         <EditText
 
             android:id="@+id/review_details"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/review_submit"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#E5E7E9  "
+        android:textSize="20dp"
+        android:background="#212F3C  "
         android:text="submit"/>
 
 
     <ListView
         android:id="@+id/ReviewListView"
         android:layout_width="wrap_content"
+        android:background="#99AAB7B8  "
         android:layout_height="wrap_content">
 
     </ListView>

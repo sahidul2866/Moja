@@ -45,7 +45,8 @@
         android:textStyle="bold"
         android:textColor="#160203"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"/>
     <EditText
         android:id="@+id/conPassRegId"
         android:hint="Confirm Password"
@@ -57,7 +58,8 @@
         android:textStyle="bold"
         android:textColor="#160203"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"/>
     <EditText
         android:id="@+id/phoneId"
         android:hint="Phone NO."
@@ -69,7 +71,8 @@
         android:textStyle="bold"
         android:textColor="#160203"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="phone"/>
     <EditText
         android:id="@+id/addressId"
         android:hint="Address"
@@ -102,15 +105,56 @@
 
         <EditText
             android:id="@+id/restaurentname"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name of the Restaurent"/>
+            android:hint="Restaurent Name"
+            android:background="#fdf8ff"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#160203"/>
 
         <EditText
             android:id="@+id/restaurentaddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location"
+            android:background="#fdf8ff"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#160203"/>
+
+        <EditText
+            android:id="@+id/cuisines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cuisines"
+            android:background="#fdf8ff"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#160203"/>
+
+        <EditText
+            android:id="@+id/min_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Location"/>
+            android:hint="Minimum Order Value"
+            android:background="#fdf8ff"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#160203"
+            android:inputType="number"/>
     </LinearLayout>
 
     <Button

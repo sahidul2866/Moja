@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mojaa</string>
+    <string name="app_name">Mojaaa</string>
 
     <string name="title_activity_login">Sign in</string>
 
@@ -20,4 +20,6 @@
         <item>User</item>
         <item>Admin</item>
     </string-array>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>

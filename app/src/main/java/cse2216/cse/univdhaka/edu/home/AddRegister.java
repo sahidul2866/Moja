@@ -8,9 +8,10 @@ public class AddRegister {
     private String Address;
     private String resName;
     private String resAddress;
+    private String type;
 
 
-    public AddRegister(String id, String uname, String pass, String mobile, String address, String resName, String resAddress) {
+    public AddRegister(String id, String uname, String pass, String mobile, String address, String resName, String resAddress,String type) {
         this.id = id;
         this.uname = uname;
         this.pass = pass;
@@ -18,17 +19,23 @@ public class AddRegister {
         Address = address;
         this.resName = resName;
         this.resAddress = resAddress;
+        this.type = type;
     }
 
     public AddRegister() {
     }
 
-    public AddRegister(String id, String uname, String pass, String mobile, String address) {
+    public AddRegister(String id, String uname, String pass, String mobile, String address,String type) {
         this.id = id;
         this.uname = uname;
         this.pass = pass;
         Mobile = mobile;
         Address = address;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getId() {
@@ -51,11 +58,11 @@ public class AddRegister {
         return Address;
     }
 
-    public String getResName() {
-        return resName;
+    public String getResAddress() {
+        return resAddress;
     }
 
-    public String getresAddress() {
-        return resAddress;
+    public String getResName() {
+        return resName;
     }
 }
