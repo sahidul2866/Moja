@@ -1,7 +1,10 @@
 package cse2216.cse.univdhaka.edu.home;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -11,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -26,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.List.*;
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +59,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     DatabaseReference databaseReview;
     DatabaseReference databaseMenu;
     DatabaseReference databaseHome;
+    DatabaseReference databaseOrder;
 
     ListView ReviewListView;
     List<AddReview> reviewList;
@@ -76,9 +83,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
 
         setSupportActionBar(toolbar);
 
-        final ActionBar actionBar =getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
+        final android.app.ActionBar actionBar =getActionBar();
 
         menuButton = findViewById(R.id.Menu);
         reviewButton = findViewById(R.id.Reviews);
@@ -110,6 +115,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         databaseMenu = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Menu");
         databaseReview = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Review");
         databaseHome = FirebaseDatabase.getInstance().getReference("Home");
+        databaseOrder = FirebaseDatabase.getInstance().getReference("Orders");
 
         listViewMenu=findViewById(R.id.menuListID);
         ReviewListView = findViewById(R.id.ReviewListView);
@@ -149,6 +155,20 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+
+
+        listViewMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(!isConnected()) Toast.makeText(Menu.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+                foodPrice price = listMenu.get(i);
+                String id = databaseOrder.push().getKey();
+                Orders newRow = new Orders(id,user,price.getFoodName(),Double.parseDouble(price.getFoodPrice()),1,Double.parseDouble(price.getFoodPrice()),resName);
+                databaseOrder.child(id).setValue(newRow);
+                Toast.makeText(Menu.this,"Item Added to the Cart",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -271,6 +291,14 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         }
 
         add_layout.setVisibility(View.GONE);
+    }
+
+    public boolean isConnected(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null &&  networkInfo.isConnected();
     }
 
 }

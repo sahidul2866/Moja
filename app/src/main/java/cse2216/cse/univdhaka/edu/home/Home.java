@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -34,21 +35,24 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Home extends AppCompatActivity  {
 
-    Button button;
+    private Button button;
     private ListView listView;
     private List<foodPrice> list;
     private Intent intent;
-    Button login;
-    String user,type;
+    private Button login;
+    private String user,type;
     private long timer;
     private Toast backToast;
+    private Intent intent1;
 
-    SharedPreferences sharedPreferences;
-    DatabaseReference databaseHome;
+    private SharedPreferences sharedPreferences;
+    private DatabaseReference databaseHome;
 
     private android.support.v7.widget.Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+
+    private TextView HeaderName,HeaderMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +63,18 @@ public class Home extends AppCompatActivity  {
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
 
+        HeaderName = findViewById(R.id.headername);
+        HeaderMobile = findViewById(R.id.headermobile);
+        if(HeaderMobile!=null)
+        HeaderMobile.setText("gfffgf");
+
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar =getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-
-
-        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-
-        sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
-        boolean check = sharedPreferences.getBoolean("checker",false);
-        if(check == true){
-             user = sharedPreferences.getString("user","Not Found");
-            type = sharedPreferences.getString("type","Not Found");
-            System.out.println(user+type);
-        }
-        else {
-            intent = new Intent(Home.this, LogIn.class);
-            startActivity(intent);
-        }
-
-
+        isAlreadyloggedin();
 
         listView=findViewById(R.id.HomeList);
         databaseHome = FirebaseDatabase.getInstance().getReference("Home");
@@ -114,11 +107,16 @@ public class Home extends AppCompatActivity  {
                 {
                     displayMassege("Past Order is selected");
                     drawerLayout.closeDrawers();
+                    intent1 = new Intent(Home.this,CartActivity.class);
+                    intent1.putExtra("user",user);
+                    startActivity(intent1);
                     return  true;
                 }else  if(menuItem.getItemId() == R.id.nav_profileID)
                 {
                     displayMassege("Profile is selected");
                     drawerLayout.closeDrawers();
+                    intent1 = new Intent(Home.this,CartActivity.class);
+                    startActivity(intent1);
                     return  true;
                 }else  if(menuItem.getItemId() == R.id.nav_addressID)
                 {
@@ -228,5 +226,22 @@ public class Home extends AppCompatActivity  {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void isAlreadyloggedin()
+    {
+        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+
+        sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        boolean check = sharedPreferences.getBoolean("checker",false);
+        if(check == true){
+            user = sharedPreferences.getString("user","Not Found");
+            type = sharedPreferences.getString("type","Not Found");
+            System.out.println(user+type);
+        }
+        else {
+            intent = new Intent(Home.this, LogIn.class);
+            startActivity(intent);
+        }
     }
 }
