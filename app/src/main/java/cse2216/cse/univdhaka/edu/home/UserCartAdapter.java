@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class UserCartAdapter extends ArrayAdapter<AddUserCart> {
+public class UserCartAdapter extends ArrayAdapter<Orders> {
 
 
-    List<AddUserCart> list;
+    List<Orders> list;
     Context context;
     private LayoutInflater inflater;
     TextView Quantity,Total,ItemPrice;
@@ -25,9 +25,9 @@ public class UserCartAdapter extends ArrayAdapter<AddUserCart> {
     Button Increaser,Decreaser;
     ImageView Remover;
     TextView foodName,foodPrice,foodQuantity,foodTotal;
-    AddUserCart Item;
+    Orders Item;
 
-    UserCartAdapter(Context context, List<AddUserCart> list)
+    UserCartAdapter(Context context, List<Orders> list)
     {
         super(context, R.layout.cart_sample,list);
         this.context = context;
@@ -46,7 +46,7 @@ public class UserCartAdapter extends ArrayAdapter<AddUserCart> {
         foodQuantity= convertView.findViewById(R.id.usercartquantity);
         foodTotal= convertView.findViewById(R.id.usercarttotal);
         Item =list.get(position);
-        foodName.setText(Item.getFoodName());
+        foodName.setText(Item.getName());
         foodPrice.setText(Item.getPrice()+"");
         foodQuantity.setText(Item.getQuantity()+"");
         foodTotal.setText(Item.getTotal()+"");

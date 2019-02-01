@@ -69,6 +69,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("user",name);
                             editor.putString("type",addRegister.getType());
+                            editor.putString("resName",addRegister.getResName());
                             editor.putBoolean("checker",true);
                             editor.commit();
 

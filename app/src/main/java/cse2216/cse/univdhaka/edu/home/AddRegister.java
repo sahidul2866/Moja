@@ -4,23 +4,13 @@ public class AddRegister {
     private String id;
     private String uname;
     private String pass;
-    private String Mobile;
-    private String Address;
+    private String mobile;
+    private String address;
     private String resName;
     private String resAddress;
     private String type;
 
 
-    public AddRegister(String id, String uname, String pass, String mobile, String address, String resName, String resAddress,String type) {
-        this.id = id;
-        this.uname = uname;
-        this.pass = pass;
-        Mobile = mobile;
-        Address = address;
-        this.resName = resName;
-        this.resAddress = resAddress;
-        this.type = type;
-    }
 
     public AddRegister() {
     }
@@ -29,8 +19,19 @@ public class AddRegister {
         this.id = id;
         this.uname = uname;
         this.pass = pass;
-        Mobile = mobile;
-        Address = address;
+        this.mobile = mobile;
+        this.address = address;
+        this.type = type;
+    }
+
+    public AddRegister(String id, String uname, String pass, String mobile, String address, String resName, String resAddress,String type) {
+        this.id = id;
+        this.uname = uname;
+        this.pass = pass;
+        this.mobile = mobile;
+        this.address = address;
+        this.resName = resName;
+        this.resAddress = resAddress;
         this.type = type;
     }
 
@@ -51,11 +52,11 @@ public class AddRegister {
     }
 
     public String getMobile() {
-        return Mobile;
+        return mobile;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public String getResAddress() {

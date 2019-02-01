@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,28 +11,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class CartActivity extends AppCompatActivity{
-
-    ListView UserCartListView;
-    List<Orders> UserCartList;
-    DatabaseReference databaseOrders;
+public class AboutActivity extends AppCompatActivity {
 
     private String user;
     private String type,resName;
@@ -42,12 +22,10 @@ public class CartActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
     private Intent intent,intent1;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_usercart);
+        setContentView(R.layout.navigation_about);
 
         final Bundle bundle = getIntent().getExtras();
         user = bundle.getString("user");
@@ -57,7 +35,6 @@ public class CartActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbarID);
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
-        UserCartListView = findViewById(R.id.usercart);
 
         setSupportActionBar(toolbar);
 
@@ -72,7 +49,7 @@ public class CartActivity extends AppCompatActivity{
                 if(menuItem.getItemId() == R.id.nav_restaurantID)
                 {
                     displayMassege("Restaurant is selected");
-                    intent1 = new Intent(CartActivity.this,Home.class);
+                    intent1 = new Intent(AboutActivity.this,Home.class);
                     drawerLayout.closeDrawers();
                     startActivity(intent1);
                     return  true;
@@ -81,10 +58,14 @@ public class CartActivity extends AppCompatActivity{
                     displayMassege("Your Cart is selected");
                     drawerLayout.closeDrawers();
                     if(type.equals("User")) {
-
+                        intent1 = new Intent(AboutActivity.this, CartActivity.class);
+                        intent1.putExtra("resName",resName);
+                        intent1.putExtra("user", user);
+                        intent1.putExtra("type",type);
+                        startActivity(intent1);
                     }
                     else {
-                        intent1 = new Intent(CartActivity.this, AdminCart.class);
+                        intent1 = new Intent(AboutActivity.this, AdminCart.class);
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
@@ -95,7 +76,7 @@ public class CartActivity extends AppCompatActivity{
                 {
                     displayMassege("Profile is selected");
                     drawerLayout.closeDrawers();
-                    intent1 = new Intent(CartActivity.this, ActivityProfile.class);
+                    intent1 = new Intent(AboutActivity.this, ActivityProfile.class);
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
@@ -106,11 +87,6 @@ public class CartActivity extends AppCompatActivity{
                 {
                     displayMassege("About_Us is selected");
                     drawerLayout.closeDrawers();
-                    intent1 = new Intent(CartActivity.this, AboutActivity.class);
-                    intent1.putExtra("resName",resName);
-                    intent1.putExtra("user", user);
-                    intent1.putExtra("type",type);
-                    startActivity(intent1);
                     return  true;
                 }
                 else  if(menuItem.getItemId() == R.id.nav_signOutID)
@@ -123,56 +99,13 @@ public class CartActivity extends AppCompatActivity{
                     editor.putString("type","");
                     editor.putBoolean("checker",false);
                     editor.commit();
-                    intent = new Intent(CartActivity.this,LogIn.class);
+                    intent = new Intent(AboutActivity.this,LogIn.class);
                     startActivity(intent);
                     return  true;
                 }
 
 
                 return false;
-            }
-        });
-
-
-
-        databaseOrders = FirebaseDatabase.getInstance().getReference("Orders");
-
-        UserCartList = new ArrayList<>();
-
-        UserCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("list view");
-            }
-        });
-    }
-
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        databaseOrders.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                UserCartList.clear();
-
-                for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()){
-                    Orders food = reviewSnapShot.getValue(Orders.class);
-                    if(food.getUser()!=null && food.getUser().equals(user)) {
-                        UserCartList.add(new Orders(food.getId(), food.getName(), food.getPrice(), food.getQuantity(), food.getTotal()));
-                    }
-                }
-
-                UserCartAdapter adapter = new UserCartAdapter(CartActivity.this,UserCartList);
-                UserCartListView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -193,7 +126,4 @@ public class CartActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
 }
-
-

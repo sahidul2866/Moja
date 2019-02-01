@@ -3,8 +3,6 @@ package cse2216.cse.univdhaka.edu.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -16,11 +14,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,66 +26,42 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.v4.content.ContextCompat.getSystemService;
+public class AdminCart extends AppCompatActivity {
 
-public class Home extends AppCompatActivity  {
-
-    private Button button;
-    private ListView listView;
-    private List<foodPrice> list;
-    private Intent intent;
-    private Button login;
-    private String user,type,resName;
-    private long timer;
-    private Toast backToast;
-    private Intent intent1;
-
-    private SharedPreferences sharedPreferences;
-    private DatabaseReference databaseHome;
-
+    private String user;
+    private String type,resName;
     private android.support.v7.widget.Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private Intent intent,intent1;
 
-    private TextView HeaderName,HeaderMobile;
+
+    ListView UserCartListView;
+    List<Orders> UserCartList;
+    DatabaseReference databaseOrders,databaseRegister;
+    String address,mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurents);
+        setContentView(R.layout.navigation_admincart);
+
+
+        final Bundle bundle = getIntent().getExtras();
+        user = bundle.getString("user");
+        type = bundle.getString("type");
+        resName = bundle.getString("resName");
 
         toolbar = findViewById(R.id.toolbarID);
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
-
-        HeaderName = findViewById(R.id.headername);
-        HeaderMobile = findViewById(R.id.headermobile);
+        UserCartListView = findViewById(R.id.admincart);
 
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar =getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        isAlreadyloggedin();
-
-        listView=findViewById(R.id.HomeList);
-        databaseHome = FirebaseDatabase.getInstance().getReference("Home");
-        list = new ArrayList<>();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-                foodPrice price =list.get(i);
-                intent = new Intent(Home.this,Menu.class);
-                intent.putExtra("resName",price.getFoodName());
-                intent.putExtra("user",user);
-                intent.putExtra("type",type);
-                startActivity(intent);
-                Toast.makeText(Home.this,price.getFoodName(),Toast.LENGTH_LONG).show();
-            }
-        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -99,32 +70,30 @@ public class Home extends AppCompatActivity  {
                 if(menuItem.getItemId() == R.id.nav_restaurantID)
                 {
                     displayMassege("Restaurant is selected");
+                    intent1 = new Intent(AdminCart.this,Home.class);
                     drawerLayout.closeDrawers();
+                    startActivity(intent1);
                     return  true;
                 }else  if(menuItem.getItemId() == R.id.nav_pastOrderID)
                 {
                     displayMassege("Your Cart is selected");
                     drawerLayout.closeDrawers();
                     if(type.equals("User")) {
-                        intent1 = new Intent(Home.this, CartActivity.class);
+                        intent1 = new Intent(AdminCart.this, CartActivity.class);
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
                         startActivity(intent1);
                     }
                     else {
-                        intent1 = new Intent(Home.this, AdminCart.class);
-                        intent1.putExtra("resName",resName);
-                        intent1.putExtra("user", user);
-                        intent1.putExtra("type",type);
-                        startActivity(intent1);
+
                     }
                     return  true;
                 }else  if(menuItem.getItemId() == R.id.nav_profileID)
                 {
                     displayMassege("Profile is selected");
                     drawerLayout.closeDrawers();
-                    intent1 = new Intent(Home.this, ActivityProfile.class);
+                    intent1 = new Intent(AdminCart.this, ActivityProfile.class);
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
@@ -135,7 +104,7 @@ public class Home extends AppCompatActivity  {
                 {
                     displayMassege("About_Us is selected");
                     drawerLayout.closeDrawers();
-                    intent1 = new Intent(Home.this, AboutActivity.class);
+                    intent1 = new Intent(AdminCart.this, AboutActivity.class);
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
@@ -146,14 +115,13 @@ public class Home extends AppCompatActivity  {
                 {
                     displayMassege("sign Out is selected");
                     drawerLayout.closeDrawers();
-                    if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("user","");
                     editor.putString("type","");
                     editor.putBoolean("checker",false);
                     editor.commit();
-                    intent = new Intent(Home.this,LogIn.class);
+                    intent = new Intent(AdminCart.this,LogIn.class);
                     startActivity(intent);
                     return  true;
                 }
@@ -162,62 +130,53 @@ public class Home extends AppCompatActivity  {
                 return false;
             }
         });
+
+
+        databaseOrders = FirebaseDatabase.getInstance().getReference("Orders");
+        databaseRegister = FirebaseDatabase.getInstance().getReference("UsersInfo");
+
+
+        UserCartList = new ArrayList<>();
+
+        UserCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println("list view");
+            }
+        });
+
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if(timer + 2000 > System.currentTimeMillis()) {
-            backToast.cancel();
-            super.onBackPressed();
-            moveTaskToBack(true);
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
-        }
-        else {
-            backToast = Toast.makeText(Home.this,"Press back again to exit",Toast.LENGTH_LONG);
-            backToast.show();
-        }
-        timer = System.currentTimeMillis();
-    }
-
-    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-
-        databaseHome.addValueEventListener(new ValueEventListener() {
+        databaseOrders.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                list.clear();
+                UserCartList.clear();
 
-                for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()){
-                    RestaurentList Addreview = reviewSnapShot.getValue(RestaurentList.class);
-                    foodPrice newRow = new foodPrice(Addreview.getId(),Addreview.getName(),Addreview.getAddress());
-                    list.add(newRow);
+                for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()) {
+                    Orders food = reviewSnapShot.getValue(Orders.class);
+                    if (food.getReName() != null && food.getReName().equals(resName)) {
+                        
+                        UserCartList.add(new Orders(food.getId(), food.getUser(), food.getName(), food.getQuantity(), food.getAddress(), food.getMobile()));
+                    }
                 }
 
-                AdapterHome adapter = new AdapterHome(Home.this,list);
-                listView.setAdapter(adapter);
-            }
+                AdminCartAdapter adapter = new AdminCartAdapter(AdminCart.this,UserCartList);
+                UserCartListView.setAdapter(adapter);
+                }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
+
     }
-
-    public boolean isConnected(){
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return networkInfo != null &&  networkInfo.isConnected();
-    }
-
 
     private  void displayMassege(String massege)
     {
@@ -233,23 +192,5 @@ public class Home extends AppCompatActivity  {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void isAlreadyloggedin()
-    {
-        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-
-        sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
-        boolean check = sharedPreferences.getBoolean("checker",false);
-        if(check == true){
-            user = sharedPreferences.getString("user","Not Found");
-            type = sharedPreferences.getString("type","Not Found");
-            resName = sharedPreferences.getString("resName","Not Found");
-            System.out.println(user+type);
-        }
-        else {
-            intent = new Intent(Home.this, LogIn.class);
-            startActivity(intent);
-        }
     }
 }

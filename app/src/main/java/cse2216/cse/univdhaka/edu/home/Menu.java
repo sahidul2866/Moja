@@ -60,6 +60,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     DatabaseReference databaseMenu;
     DatabaseReference databaseHome;
     DatabaseReference databaseOrder;
+    DatabaseReference databaseUser;
 
     ListView ReviewListView;
     List<AddReview> reviewList;
@@ -72,6 +73,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
     TextView InfoAddress;
     TextView InfoCuisines;
     TextView InfoMin;
+    String address,mobile;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -116,6 +118,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         databaseReview = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Review");
         databaseHome = FirebaseDatabase.getInstance().getReference("Home");
         databaseOrder = FirebaseDatabase.getInstance().getReference("Orders");
+        databaseUser = FirebaseDatabase.getInstance().getReference("UsersInfo");
 
         listViewMenu=findViewById(R.id.menuListID);
         ReviewListView = findViewById(R.id.ReviewListView);
@@ -138,7 +141,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
 
                 for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()){
                     RestaurentList Addreview = reviewSnapShot.getValue(RestaurentList.class);
-                    if(Addreview.getName().equals(resName)) {
+                    if(Addreview.getName()!=null && Addreview.getName().equals(resName)) {
                         InfoName.setText(Addreview.getName());
                         InfoAddress.setText(Addreview.getAddress());
                         InfoCuisines.setText(Addreview.getCuisines());
@@ -164,11 +167,27 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(!isConnected()) Toast.makeText(Menu.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-                foodPrice price = listMenu.get(i);
-                String id = databaseOrder.push().getKey();
-                Orders newRow = new Orders(id,user,price.getFoodName(),Double.parseDouble(price.getFoodPrice()),1,Double.parseDouble(price.getFoodPrice()),resName);
-                databaseOrder.child(id).setValue(newRow);
-                Toast.makeText(Menu.this,"Item Added to the Cart",Toast.LENGTH_LONG).show();
+                if(!typee.equals("Admin")) {
+                    foodPrice price = listMenu.get(i);
+                    databaseUser.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            AddRegister person = dataSnapshot.getValue(AddRegister.class);
+                            address = person.getAddress();
+                            mobile = person.getMobile();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    String id = databaseOrder.push().getKey();
+                    Orders newRow = new Orders(id, user, price.getFoodName(), Double.parseDouble(price.getFoodPrice()), 1, Double.parseDouble(price.getFoodPrice()), resName,address,mobile);
+                    databaseOrder.child(id).setValue(newRow);
+                    Toast.makeText(Menu.this, "Item Added to the Cart", Toast.LENGTH_LONG).show();
+                }
+                else Toast.makeText(Menu.this, "You are an admin", Toast.LENGTH_LONG).show();
             }
         });
 

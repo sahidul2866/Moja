@@ -20,16 +20,6 @@
             android:id="@+id/nav_profileID"
             android:icon="@drawable/ic_profile" />
         <item
-            android:title="Address"
-            android:id="@+id/nav_addressID"
-            android:icon="@drawable/ic_address"
-            />
-        <item
-            android:title="Reviews"
-            android:id="@+id/nav_reviewsID"
-            android:icon="@drawable/ic_review"
-            />
-        <item
             android:title="About us"
             android:id="@+id/nav_aboutUsID"
             android:icon="@drawable/ic_about_us" />

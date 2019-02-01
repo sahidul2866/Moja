@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:gravity="bottom"
+
+        android:background="@drawable/proback">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/profileuname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="#99f2f2f2"
+            android:text="Sanjoy"
+
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textColor="#1b2631"
+            android:textSize="21sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#2E4053"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+
+            android:layout_marginTop="40dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name:  "
+                android:textSize="16dp"
+                android:textColor="#f2f2f2"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/profilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sanjoy Kumar Mahato "
+                android:textSize="16dp"
+                android:textColor="#f2f2f2"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: "
+                android:textSize="16dp"
+                android:textColor="#f2f2f2"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/profileemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f2f2f2"
+                android:text="Sahidul2866@GMAIL.COM"
+                android:textSize="16dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone:  "
+                android:textSize="16dp"
+                android:textColor="#f2f2f2"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/profilemobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f2f2f2"
+                android:textSize="16dp"
+                android:text="01788423596"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="90dp"
+
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address: "
+                android:textColor="#f2f2f2"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/profileaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sirajganj"
+                android:textSize="16dp"
+                android:textColor="#f2f2f2"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
