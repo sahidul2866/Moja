@@ -3,6 +3,8 @@ package cse2216.cse.univdhaka.edu.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -41,6 +43,7 @@ public class CartActivity extends AppCompatActivity{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Intent intent,intent1;
+    String mobile;
 
 
 
@@ -58,6 +61,15 @@ public class CartActivity extends AppCompatActivity{
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
         UserCartListView = findViewById(R.id.usercart);
+        resName = bundle.getString("resName");
+        mobile = bundle.getString("mobile");
+
+        TextView HeaderName,HeaderMobile;
+        View headerLayout = navigationView.getHeaderView(0);
+        HeaderName = headerLayout.findViewById(R.id.headername);
+        HeaderMobile = headerLayout.findViewById(R.id.headermobile);
+        HeaderMobile.setText(bundle.getString("mobile"));
+        HeaderName.setText(user);
 
         setSupportActionBar(toolbar);
 
@@ -88,6 +100,7 @@ public class CartActivity extends AppCompatActivity{
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile",mobile);
                         startActivity(intent1);
                     }
                     return  true;
@@ -99,6 +112,7 @@ public class CartActivity extends AppCompatActivity{
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+                    intent1.putExtra("mobile",mobile);
                     startActivity(intent1);
                     return  true;
                 }
@@ -110,6 +124,7 @@ public class CartActivity extends AppCompatActivity{
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+                    intent1.putExtra("mobile",mobile);
                     startActivity(intent1);
                     return  true;
                 }
@@ -142,7 +157,7 @@ public class CartActivity extends AppCompatActivity{
         UserCartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("list view");
+                view.getTag();
             }
         });
     }
@@ -157,7 +172,7 @@ public class CartActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 UserCartList.clear();
-
+                isConnected();
                 for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()){
                     Orders food = reviewSnapShot.getValue(Orders.class);
                     if(food.getUser()!=null && food.getUser().equals(user)) {
@@ -192,6 +207,17 @@ public class CartActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void isConnected(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (!(networkInfo != null &&  networkInfo.isConnected())){
+            Toast.makeText(CartActivity.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+
+        }
     }
 
 }

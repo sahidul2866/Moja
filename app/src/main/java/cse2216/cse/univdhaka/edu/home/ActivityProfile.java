@@ -3,6 +3,8 @@ package cse2216.cse.univdhaka.edu.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -12,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +29,7 @@ public class ActivityProfile extends AppCompatActivity {
     private DatabaseReference databaseLogin;
     TextView uname, name, address, mobile, email;
 
-    private String user;
+    private String user,mobilee;
     private String type,resName;
     private android.support.v7.widget.Toolbar toolbar;
     private NavigationView navigationView;
@@ -47,8 +50,15 @@ public class ActivityProfile extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarID);
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
-        HeaderName = findViewById(R.id.headername);
-        HeaderMobile = findViewById(R.id.headermobile);
+        resName = bundle.getString("resName");
+        mobilee = bundle.getString("mobile");
+
+        TextView HeaderName,HeaderMobile;
+        View headerLayout = navigationView.getHeaderView(0);
+        HeaderName = headerLayout.findViewById(R.id.headername);
+        HeaderMobile = headerLayout.findViewById(R.id.headermobile);
+        HeaderMobile.setText(bundle.getString("mobile"));
+        HeaderName.setText(user);
 
         setSupportActionBar(toolbar);
 
@@ -76,6 +86,7 @@ public class ActivityProfile extends AppCompatActivity {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile",mobilee);
                         startActivity(intent1);
                     }
                     else {
@@ -83,6 +94,7 @@ public class ActivityProfile extends AppCompatActivity {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile",mobilee);
                         startActivity(intent1);
                     }
                     return  true;
@@ -100,6 +112,8 @@ public class ActivityProfile extends AppCompatActivity {
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+
+                    intent1.putExtra("mobile",mobilee);
                     startActivity(intent1);
                     return  true;
                 }
@@ -136,7 +150,7 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
                 int success = 0;
-
+                isConnected();
                 for (DataSnapshot reviewSnapShot1 : dataSnapshot1.getChildren()) {
                     AddRegister addRegister = reviewSnapShot1.getValue(AddRegister.class);
                     if (addRegister.getUname().equals(user)) {
@@ -169,5 +183,16 @@ public class ActivityProfile extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void isConnected(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (!(networkInfo != null &&  networkInfo.isConnected())){
+            Toast.makeText(ActivityProfile.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+
+        }
     }
 }

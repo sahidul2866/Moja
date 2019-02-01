@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/adminaddressID"
-                android:layout_width="70dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="Gulshan"
                 android:textSize="15sp"
@@ -52,7 +52,7 @@
 
             <TextView
                 android:id="@+id/adminPhoneID"
-                android:layout_width="70dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="01788423696"
                 android:textSize="15sp"

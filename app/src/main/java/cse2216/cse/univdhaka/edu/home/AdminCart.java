@@ -3,6 +3,8 @@ package cse2216.cse.univdhaka.edu.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +59,14 @@ public class AdminCart extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
         UserCartListView = findViewById(R.id.admincart);
+        resName = bundle.getString("resName");
 
+        TextView HeaderName,HeaderMobile;
+        View headerLayout = navigationView.getHeaderView(0);
+        HeaderName = headerLayout.findViewById(R.id.headername);
+        HeaderMobile = headerLayout.findViewById(R.id.headermobile);
+        HeaderMobile.setText(bundle.getString("mobile"));
+        HeaderName.setText(user);
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar =getSupportActionBar();
@@ -155,7 +165,7 @@ public class AdminCart extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 UserCartList.clear();
-
+                isConnected();
                 for(DataSnapshot reviewSnapShot: dataSnapshot.getChildren()) {
                     Orders food = reviewSnapShot.getValue(Orders.class);
                     if (food.getReName() != null && food.getReName().equals(resName)) {
@@ -192,5 +202,16 @@ public class AdminCart extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void isConnected(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (!(networkInfo != null &&  networkInfo.isConnected())){
+            Toast.makeText(AdminCart.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+
+        }
     }
 }

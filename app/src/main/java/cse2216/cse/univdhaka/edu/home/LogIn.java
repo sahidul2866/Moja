@@ -71,6 +71,8 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener{
                             editor.putString("type",addRegister.getType());
                             editor.putString("resName",addRegister.getResName());
                             editor.putBoolean("checker",true);
+                            editor.putString("address",addRegister.getAddress());
+                            editor.putString("mobile",addRegister.getMobile());
                             editor.commit();
 
                             Intent intent = new Intent(LogIn.this,Home.class);

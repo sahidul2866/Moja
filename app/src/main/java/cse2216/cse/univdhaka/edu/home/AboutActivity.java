@@ -11,12 +11,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends AppCompatActivity {
 
     private String user;
-    private String type,resName;
+    private String type,resName,mobile;
     private android.support.v7.widget.Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -31,10 +33,18 @@ public class AboutActivity extends AppCompatActivity {
         user = bundle.getString("user");
         type = bundle.getString("type");
         resName = bundle.getString("resName");
+        mobile = bundle.getString("mobile");
 
         toolbar = findViewById(R.id.toolbarID);
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
+
+        TextView HeaderName,HeaderMobile;
+        View headerLayout = navigationView.getHeaderView(0);
+        HeaderName = headerLayout.findViewById(R.id.headername);
+        HeaderMobile = headerLayout.findViewById(R.id.headermobile);
+        HeaderMobile.setText(bundle.getString("mobile"));
+        HeaderName.setText(user);
 
         setSupportActionBar(toolbar);
 
@@ -62,6 +72,7 @@ public class AboutActivity extends AppCompatActivity {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile", mobile);
                         startActivity(intent1);
                     }
                     else {
@@ -69,6 +80,7 @@ public class AboutActivity extends AppCompatActivity {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile", mobile);
                         startActivity(intent1);
                     }
                     return  true;
@@ -80,6 +92,7 @@ public class AboutActivity extends AppCompatActivity {
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+                    intent1.putExtra("mobile", mobile);
                     startActivity(intent1);
                     return  true;
                 }

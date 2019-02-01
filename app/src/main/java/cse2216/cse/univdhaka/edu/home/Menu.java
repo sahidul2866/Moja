@@ -112,6 +112,8 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
         user = bundle.getString("user");
         typee = bundle.getString("type");
         resName = bundle.getString("resName");
+        address = bundle.getString("address");
+        mobile = bundle.getString("mobile");
         System.out.println(user+typee+resName);
 
         databaseMenu = FirebaseDatabase.getInstance().getReference(bundle.getString("resName") + "Menu");
@@ -169,19 +171,7 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
                 if(!isConnected()) Toast.makeText(Menu.this,"Network Unavailable",Toast.LENGTH_LONG).show();
                 if(!typee.equals("Admin")) {
                     foodPrice price = listMenu.get(i);
-                    databaseUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            AddRegister person = dataSnapshot.getValue(AddRegister.class);
-                            address = person.getAddress();
-                            mobile = person.getMobile();
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
                     String id = databaseOrder.push().getKey();
                     Orders newRow = new Orders(id, user, price.getFoodName(), Double.parseDouble(price.getFoodPrice()), 1, Double.parseDouble(price.getFoodPrice()), resName,address,mobile);
                     databaseOrder.child(id).setValue(newRow);

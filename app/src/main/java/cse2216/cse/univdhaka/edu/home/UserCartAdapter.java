@@ -79,7 +79,7 @@ public class UserCartAdapter extends ArrayAdapter<Orders> {
         viewHolder.Remover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.remove(position);
+                list.remove(position-1);
             }
         });
         convertView.setTag(viewHolder);

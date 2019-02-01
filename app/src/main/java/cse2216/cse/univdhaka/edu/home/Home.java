@@ -13,10 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,10 +42,11 @@ public class Home extends AppCompatActivity  {
     private List<foodPrice> list;
     private Intent intent;
     private Button login;
-    private String user,type,resName;
+    private String user,type,resName,address,mobile;
     private long timer;
     private Toast backToast;
     private Intent intent1;
+    private ImageView imageView;
 
     private SharedPreferences sharedPreferences;
     private DatabaseReference databaseHome;
@@ -58,39 +61,24 @@ public class Home extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurents);
-
+        isAlreadyloggedin();
         toolbar = findViewById(R.id.toolbarID);
         navigationView = findViewById(R.id.navigationViewID);
         drawerLayout = findViewById(R.id.drawerLayoutID);
 
-        HeaderName = findViewById(R.id.headername);
-        HeaderMobile = findViewById(R.id.headermobile);
-
+        View headerLayout = navigationView.getHeaderView(0);
+        HeaderName = headerLayout.findViewById(R.id.headername);
+        HeaderMobile = headerLayout.findViewById(R.id.headermobile);
+        HeaderMobile.setText(mobile);
+        HeaderName.setText(user);
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar =getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        isAlreadyloggedin();
 
-        listView=findViewById(R.id.HomeList);
-        databaseHome = FirebaseDatabase.getInstance().getReference("Home");
-        list = new ArrayList<>();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
-                foodPrice price =list.get(i);
-                intent = new Intent(Home.this,Menu.class);
-                intent.putExtra("resName",price.getFoodName());
-                intent.putExtra("user",user);
-                intent.putExtra("type",type);
-                startActivity(intent);
-                Toast.makeText(Home.this,price.getFoodName(),Toast.LENGTH_LONG).show();
-            }
-        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -110,6 +98,7 @@ public class Home extends AppCompatActivity  {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile", mobile);
                         startActivity(intent1);
                     }
                     else {
@@ -117,6 +106,7 @@ public class Home extends AppCompatActivity  {
                         intent1.putExtra("resName",resName);
                         intent1.putExtra("user", user);
                         intent1.putExtra("type",type);
+                        intent1.putExtra("mobile", mobile);
                         startActivity(intent1);
                     }
                     return  true;
@@ -128,6 +118,7 @@ public class Home extends AppCompatActivity  {
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+                    intent1.putExtra("mobile", mobile);
                     startActivity(intent1);
                     return  true;
                 }
@@ -139,6 +130,7 @@ public class Home extends AppCompatActivity  {
                     intent1.putExtra("resName",resName);
                     intent1.putExtra("user", user);
                     intent1.putExtra("type",type);
+                    intent1.putExtra("mobile", mobile);
                     startActivity(intent1);
                     return  true;
                 }
@@ -146,7 +138,6 @@ public class Home extends AppCompatActivity  {
                 {
                     displayMassege("sign Out is selected");
                     drawerLayout.closeDrawers();
-                    if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("user","");
@@ -162,6 +153,38 @@ public class Home extends AppCompatActivity  {
                 return false;
             }
         });
+
+        imageView = findViewById(R.id.offer);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isConnected();
+                Toast.makeText(Home.this, "Not Available", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        listView=findViewById(R.id.HomeList);
+        databaseHome = FirebaseDatabase.getInstance().getReference("Home");
+        list = new ArrayList<>();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                isConnected();
+                foodPrice price =list.get(i);
+                intent = new Intent(Home.this,Menu.class);
+                intent.putExtra("resName",price.getFoodName());
+                intent.putExtra("user",user);
+                intent.putExtra("type",type);
+                intent.putExtra("address",address);
+                intent.putExtra("mobile",mobile);
+                startActivity(intent);
+                Toast.makeText(Home.this,price.getFoodName(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
 
@@ -185,7 +208,7 @@ public class Home extends AppCompatActivity  {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+        isConnected();
 
         databaseHome.addValueEventListener(new ValueEventListener() {
             @Override
@@ -210,12 +233,15 @@ public class Home extends AppCompatActivity  {
         });
     }
 
-    public boolean isConnected(){
+    public void isConnected(){
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        return networkInfo != null &&  networkInfo.isConnected();
+        if (!(networkInfo != null &&  networkInfo.isConnected())){
+            Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
+
+        }
     }
 
 
@@ -237,7 +263,6 @@ public class Home extends AppCompatActivity  {
 
     public void isAlreadyloggedin()
     {
-        if(!isConnected()) Toast.makeText(Home.this,"Network Unavailable",Toast.LENGTH_LONG).show();
 
         sharedPreferences = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
         boolean check = sharedPreferences.getBoolean("checker",false);
@@ -245,6 +270,8 @@ public class Home extends AppCompatActivity  {
             user = sharedPreferences.getString("user","Not Found");
             type = sharedPreferences.getString("type","Not Found");
             resName = sharedPreferences.getString("resName","Not Found");
+            mobile = sharedPreferences.getString("mobile","Not Found");
+            address = sharedPreferences.getString("address","Not Found");
             System.out.println(user+type);
         }
         else {
